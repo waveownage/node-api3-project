@@ -18,13 +18,29 @@ router.get('/', (req, res) => {
   .catch(error => {
     console.log(error);
     res.status(500).json({
-      error: "The posts information could not be retrieved."
+      error: "The User could not be retrieved."
     });
   });
 });
 
 router.get('/:id', (req, res) => {
-  // do your magic!
+  users
+    .getById(req.params.id)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(404).json({
+          message: "The User with the specified ID does not exist."
+        });
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        error: "User information could not be retrieved."
+      });
+    });
 });
 
 router.get('/:id/posts', (req, res) => {
