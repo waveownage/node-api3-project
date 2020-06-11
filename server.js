@@ -1,8 +1,14 @@
 const express = require('express');
 
+const logger = require("./middleware/logger")
+
 const server = express();
 
 const port = 4000
+
+server.use(express.json())
+
+server.use(logger("short"))
 
 server.use((err, req, res, next) => {
 	console.log(err)
