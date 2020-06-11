@@ -2,12 +2,15 @@ const express = require('express');
 
 const server = express();
 
-server.get('/', (req, res) => {
-  res.send(`<h2>Let's write some middleware!</h2>`);
-});
+const port = 4000
 
-//custom middleware
+server.use((err, req, res, next) => {
+	console.log(err)
+		res.status(500).json({
+			message: "Something went wrong"
+		})
+	})
 
-function logger(req, res, next) {}
-
-module.exports = server;
+server.listen(port, () => {
+	console.log(`Server running at http://localhost:${port}`)
+})
