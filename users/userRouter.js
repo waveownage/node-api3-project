@@ -1,17 +1,26 @@
 const express = require('express');
-
+const users = require("./userDb")
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  // do your magic!
+
 });
 
 router.post('/:id/posts', (req, res) => {
-  // do your magic!
-});
+})
 
 router.get('/', (req, res) => {
-  // do your magic!
+  users
+    .get({})
+    .then(user => {
+      res.status(200).json(user);
+    })
+  .catch(error => {
+    console.log(error);
+    res.status(500).json({
+      error: "The posts information could not be retrieved."
+    });
+  });
 });
 
 router.get('/:id', (req, res) => {
@@ -33,11 +42,29 @@ router.put('/:id', (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-  // do your magic!
+  return (req, res, next) => {
+		users.findById(req.params.id)
+			.then((user) => {
+				if (user) {
+					req.user = user
+					next()
+				} else {
+					res.status(404).json({
+						message: "User not found",
+					})
+				}
+			})
+			.catch(next)
+	}
 }
 
 function validateUser(req, res, next) {
-  // do your magic!
+  if (!req.body.name || !req.body.email) {
+    return res.status(400).json({
+      message: "Missing user name or email",
+    })
+  }
+  next()
 }
 
 function validatePost(req, res, next) {

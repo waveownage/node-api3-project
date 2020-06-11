@@ -1,5 +1,5 @@
 const express = require('express');
-
+const router = require('./users/userRouter')
 const logger = require("./middleware/logger")
 
 const server = express();
@@ -7,6 +7,7 @@ const server = express();
 const port = 4000
 
 server.use(express.json())
+server.use(router)
 
 server.use(logger("short"))
 
